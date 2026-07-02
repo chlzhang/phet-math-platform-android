@@ -69,7 +69,5 @@
   "globalStyle": {
     "backgroundColor": "#fff8e1",
     "backgroundTextStyle": "dark"
-  },
-  "uniIdRouter": {},
-  "condition": {}
+  }
 }
