@@ -28,9 +28,10 @@ function renderModeTabs() {
 function setMode(newMode) {
   mode = newMode;
   document.getElementById('demoControls').classList.toggle('hidden', mode !== 'demo');
+  document.getElementById('treeControls').classList.toggle('hidden', mode === 'demo');
   document.getElementById('tip').textContent = mode === 'demo'
     ? '点击“开始演示”，理解段数和棵数的关系。'
-    : '点击道路上的位置种树，使棵数符合题目要求。';
+    : '点击“种一棵”或“移除一棵”调整道路两旁的树，使棵数符合题目要求。';
   reset();
 }
 
@@ -67,6 +68,11 @@ function renderControls() {
   `;
   bindNumberInput(document.getElementById('lenInput'), { int: true, min: 1, max: 1000 });
   bindNumberInput(document.getElementById('intInput'), { int: true, min: 1, max: 100 });
+
+  document.getElementById('treeControls').innerHTML = `
+    <button class="btn btn-primary btn-lg" onclick="addTree()">🌳 种一棵</button>
+    <button class="btn btn-danger btn-lg" onclick="removeTree()">🗑️ 移除一棵</button>
+  `;
 
   document.getElementById('demoControls').innerHTML = `
     <button class="btn btn-primary" onclick="startDemo()">开始演示</button>
@@ -107,19 +113,27 @@ function renderRoad() {
   document.getElementById('currentTrees').textContent = plantedPositions.length;
 }
 
-function plantTree(ev) {
-  if (mode !== 'interactive') return;
-  const rect = document.getElementById('road').getBoundingClientRect();
-  const x = (ev.clientX - rect.left) / rect.width;
+function getValidPositions() {
   const segments = Math.floor(config.length / config.interval);
-  let validPositions = [];
+  const validPositions = [];
   if (config.type === 'both') for (let i = 0; i <= segments; i++) validPositions.push(i / segments);
   else if (config.type === 'one') for (let i = 0; i < segments; i++) validPositions.push(i / segments);
   else if (config.type === 'none') for (let i = 1; i < segments; i++) validPositions.push(i / segments);
   else for (let i = 0; i < segments; i++) validPositions.push(i / segments);
-  
-  const best = validPositions.reduce((p, c) => Math.abs(c - x) < Math.abs(p - x) ? c : p, validPositions[0]);
-  if (!plantedPositions.includes(best)) plantedPositions.push(best);
+  return validPositions;
+}
+
+function addTree() {
+  if (mode !== 'interactive') return;
+  const validPositions = getValidPositions();
+  const next = validPositions.find(p => !plantedPositions.includes(p));
+  if (next !== undefined) plantedPositions.push(next);
+  renderRoad(); checkSuccess();
+}
+
+function removeTree() {
+  if (mode !== 'interactive' || plantedPositions.length === 0) return;
+  plantedPositions.pop();
   renderRoad(); checkSuccess();
 }
 
@@ -127,7 +141,10 @@ function checkSuccess() {
   const target = getTarget();
   if (plantedPositions.length === target) {
     showSuccess(document.getElementById('successMsg'), `🎉 正确！${typeNames[config.type]}时，棵数 = ${config.type === 'both' ? '段数+1' : config.type === 'none' ? '段数-1' : '段数'}。`);
-  } else document.getElementById('successMsg').style.display = 'none';
+    sendAnswerEvent({ type: 'tree_planting', correct: true, score: 100, params: config });
+  } else {
+    document.getElementById('successMsg').style.display = 'none';
+  }
 }
 
 function prepareInteractiveSteps() {
@@ -173,6 +190,7 @@ function nextStep() {
     }
     document.getElementById('currentTrees').textContent = target;
     showSuccess(document.getElementById('successMsg'), `🎉 演示完成！共 ${target} 棵。`);
+    sendAnswerEvent({ type: 'tree_planting', correct: true, score: 100, params: config });
   }
   stepIndex++;
 }

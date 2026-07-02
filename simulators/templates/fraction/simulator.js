@@ -111,6 +111,7 @@ function showAnswer() {
   const r = computeResult();
   document.getElementById('userAnswer').textContent = `${r.simpNum}/${r.simpDen}`;
   document.getElementById('correctAnswer').textContent = `${r.simpNum}/${r.simpDen}`;
+  sendAnswerEvent({ type: 'fraction', correct: true, score: 100, params: config });
 }
 
 function prepareInteractiveSteps() {
@@ -149,6 +150,7 @@ function nextStep() {
     document.getElementById('userAnswer').textContent = `${r.simpNum}/${r.simpDen}`;
     document.getElementById('correctAnswer').textContent = `${r.simpNum}/${r.simpDen}`;
     showSuccess(document.getElementById('successMsg'), '🎉 演示完成！通分后图形才能直接相加。');
+    sendAnswerEvent({ type: 'fraction', correct: true, score: 100, params: config });
   }
   stepIndex++;
 }

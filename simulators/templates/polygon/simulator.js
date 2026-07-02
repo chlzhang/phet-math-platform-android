@@ -55,7 +55,7 @@ function renderControls() {
     <div class="input-group"><label>下底</label><input id="bInput" value="${config.b}"></div>
     <div class="input-group"><label>高</label><input id="hInput" value="${config.h}"></div>
     <button class="btn btn-primary" onclick="applyConfig()">生成</button>
-    <button class="btn btn-secondary" onclick="animateTransform()">变形</button>
+    <button class="btn btn-secondary" onclick="animateTransform(() => sendAnswerEvent({ type: 'polygon', correct: true, score: 100, params: config }))">变形</button>
     <button class="btn btn-danger" onclick="reset()">重置</button>
   `;
   bindNumberInput(document.getElementById('aInput'), { int: true, min: 1, max: 50 });
@@ -88,10 +88,13 @@ function applyConfig() {
   reset();
 }
 
-function animateTransform() {
+function animateTransform(onComplete) {
   if (animating) return;
   animating = true;
-  animate(1500, p => { progress = p; draw(); }, () => { animating = false; });
+  animate(1500, p => { progress = p; draw(); }, () => {
+    animating = false;
+    if (onComplete) onComplete();
+  });
 }
 
 function draw() {
@@ -211,6 +214,7 @@ function nextStep() {
   draw();
   if (stepIndex === 3) {
     showSuccess(document.getElementById('successMsg'), '🎉 推导完成！公式来源清楚了吗？');
+    sendAnswerEvent({ type: 'polygon', correct: true, score: 100, params: config });
   }
   stepIndex++;
 }

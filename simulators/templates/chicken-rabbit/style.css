@@ -1,10 +1,36 @@
 .animal {
-  width: 60px; height: 60px;
+  width: 64px; height: 64px;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  border-radius: 10px; background: white;
+  border-radius: 12px; background: white;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  font-size: 1.7rem; position: relative;
+  font-size: 1.8rem; position: relative;
 }
-.animal-name { font-size: 0.65rem; color: #666; }
-.leg-badge { position: absolute; bottom: 2px; right: 3px; font-size: 0.6rem; background: #eee; padding: 1px 4px; border-radius: 8px; }
+.animal-name { font-size: 0.7rem; color: #666; }
+.leg-badge { position: absolute; bottom: 3px; right: 4px; font-size: 0.65rem; background: #eee; padding: 2px 5px; border-radius: 8px; }
+
+.animal-control {
+  text-align: center;
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 12px;
+  min-width: 110px;
+}
+.animal-emoji { font-size: 2.4rem; }
+.animal-label { font-size: 1rem; color: #555; margin: 4px 0 8px; }
+.animal-buttons { display: flex; gap: 12px; justify-content: center; }
+.animal-buttons .btn-lg {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 1.4rem;
+  padding: 0;
+  border-radius: 10px;
+}
+
+#cageArea {
+  min-height: 240px;
+}
+
+#animalGrid {
+  gap: 12px;
+}

@@ -65,7 +65,7 @@ function renderControls() {
     <div class="input-group"><label>甲速</label><input id="v1Input" value="${config.v1}"></div>
     <div class="input-group"><label>乙速</label><input id="v2Input" value="${config.v2}"></div>
     <button class="btn btn-primary" onclick="applyConfig()">生成题目</button>
-    <button class="btn btn-secondary" onclick="playAnimation()">播放动画</button>
+    <button class="btn btn-secondary" onclick="playAnimation(() => sendAnswerEvent({ type: 'travel', correct: true, score: 100, params: config }))">播放动画</button>
     <button class="btn btn-danger" onclick="reset()">重置</button>
   `;
   bindNumberInput(document.getElementById('distInput'), { int: true, min: 10, max: 10000 });
@@ -107,7 +107,7 @@ function updateStats(time, distA, distB) {
   document.getElementById('distB').textContent = distB ? distB.toFixed(1) + ' 米' : '0';
 }
 
-function playAnimation() {
+function playAnimation(onComplete) {
   const track = document.getElementById('track');
   const w = track.clientWidth - 40;
   const time = computeTime();
@@ -121,7 +121,10 @@ function playAnimation() {
   document.getElementById('b').style.left = config.type === 'meet' ? meetLeft + 'px' : (10 + (distB / config.distance) * w) + 'px';
   document.getElementById('meetPoint').style.left = meetLeft + 'px';
   document.getElementById('meetPoint').style.opacity = '1';
-  setTimeout(() => updateStats(time, distA, distB), time * 1000);
+  setTimeout(() => {
+    updateStats(time, distA, distB);
+    if (onComplete) onComplete();
+  }, time * 1000);
 }
 
 function prepareInteractiveSteps() {
@@ -154,7 +157,7 @@ function nextStep() {
   if (stepIndex >= demoSteps.length) { stepIndex = 0; return; }
   activateStep(document.getElementById('steps'), stepIndex);
   if (stepIndex === demoSteps.length - 1) {
-    playAnimation();
+    playAnimation(() => sendAnswerEvent({ type: 'travel', correct: true, score: 100, params: config }));
     showSuccess(document.getElementById('successMsg'), '🎉 动画开始！观察两人何时相遇/追上。');
   }
   stepIndex++;

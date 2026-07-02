@@ -42,7 +42,7 @@ function renderControls() {
     <div class="input-group"><label>半径</label><input id="rInput" value="${config.r}"></div>
     <div class="input-group"><label>份数</label><input id="partsInput" value="${config.parts}"></div>
     <button class="btn btn-primary" onclick="applyConfig()">生成</button>
-    <button class="btn btn-secondary" onclick="animateUnwrap()">展开</button>
+    <button class="btn btn-secondary" onclick="animateUnwrap(() => sendAnswerEvent({ type: 'circle', correct: true, score: 100, params: config }))">展开</button>
     <button class="btn btn-danger" onclick="reset()">重置</button>
   `;
   bindNumberInput(document.getElementById('rInput'), { int: true, min: 1, max: 20 });
@@ -71,10 +71,13 @@ function applyConfig() {
   reset();
 }
 
-function animateUnwrap() {
+function animateUnwrap(onComplete) {
   if (animating) return;
   animating = true;
-  animate(1500, p => { progress = p; draw(); }, () => { animating = false; });
+  animate(1500, p => { progress = p; draw(); }, () => {
+    animating = false;
+    if (onComplete) onComplete();
+  });
 }
 
 function draw() {
@@ -159,6 +162,7 @@ function nextStep() {
   draw();
   if (stepIndex === 4) {
     showSuccess(document.getElementById('successMsg'), '🎉 推导完成！圆面积公式 S = πr²。');
+    sendAnswerEvent({ type: 'circle', correct: true, score: 100, params: config });
   }
   stepIndex++;
 }

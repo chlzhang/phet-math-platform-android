@@ -32,7 +32,7 @@ function setMode(newMode) {
   document.getElementById('palette').classList.toggle('hidden', mode === 'demo');
   document.getElementById('tip').textContent = mode === 'demo'
     ? '点击“开始演示”，系统会一步步讲解鸡兔同笼的解法。'
-    : '拖动小鸡或小兔到笼子里，让当前头数和腿数与题目一致。';
+    : '点击 + / − 按钮调整小鸡和小兔数量，让当前头数和腿数与题目一致。';
   reset();
 }
 
@@ -58,15 +58,19 @@ function renderControls() {
 
   const palette = document.getElementById('palette');
   palette.innerHTML = `
-    <div draggable="true" ondragstart="dragStart(event,'chicken')" style="text-align:center;cursor:grab">
-      <div style="font-size:2rem">🐔</div><div style="font-size:0.8rem">小鸡</div>
-      <div><button class="btn btn-primary" style="margin-top:5px" onclick="addAnimal('chicken')">+</button>
-      <button class="btn btn-danger" onclick="removeAnimal('chicken')">−</button></div>
+    <div class="animal-control">
+      <div class="animal-emoji">🐔</div><div class="animal-label">小鸡</div>
+      <div class="animal-buttons">
+        <button class="btn btn-primary btn-lg" onclick="addAnimal('chicken')">+</button>
+        <button class="btn btn-danger btn-lg" onclick="removeAnimal('chicken')">−</button>
+      </div>
     </div>
-    <div draggable="true" ondragstart="dragStart(event,'rabbit')" style="text-align:center;cursor:grab">
-      <div style="font-size:2rem">🐰</div><div style="font-size:0.8rem">小兔</div>
-      <div><button class="btn btn-primary" style="margin-top:5px" onclick="addAnimal('rabbit')">+</button>
-      <button class="btn btn-danger" onclick="removeAnimal('rabbit')">−</button></div>
+    <div class="animal-control">
+      <div class="animal-emoji">🐰</div><div class="animal-label">小兔</div>
+      <div class="animal-buttons">
+        <button class="btn btn-primary btn-lg" onclick="addAnimal('rabbit')">+</button>
+        <button class="btn btn-danger btn-lg" onclick="removeAnimal('rabbit')">−</button>
+      </div>
     </div>
   `;
 
@@ -115,9 +119,6 @@ function removeAnimal(type) {
   if (type === 'rabbit' && rabbits > 0) rabbits--;
   renderCage(); checkSuccess();
 }
-function dragStart(ev, type) { ev.dataTransfer.setData('type', type); }
-function allowDrop(ev) { ev.preventDefault(); }
-function drop(ev) { ev.preventDefault(); addAnimal(ev.dataTransfer.getData('type')); }
 
 function renderCage() {
   const grid = document.getElementById('animalGrid'); grid.innerHTML = '';
@@ -139,7 +140,10 @@ function checkSuccess() {
   const heads = chickens + rabbits, legs = chickens * 2 + rabbits * 4;
   if (heads === config.heads && legs === config.legs) {
     showSuccess(document.getElementById('successMsg'), `🎉 答对了！${chickens} 只小鸡，${rabbits} 只小兔。`);
-  } else document.getElementById('successMsg').style.display = 'none';
+    sendAnswerEvent({ type: 'chicken_rabbit', correct: true, score: 100, params: config });
+  } else {
+    document.getElementById('successMsg').style.display = 'none';
+  }
 }
 
 function setMethod(m) { method = m; renderControls(); reset(); }
@@ -208,6 +212,7 @@ function nextStep() {
   renderCage();
   if (stepIndex === demoSteps.length - 1) {
     showSuccess(document.getElementById('successMsg'), `🎉 演示完成！${chickensAns} 只小鸡，${rabbitsAns} 只小兔。`);
+    sendAnswerEvent({ type: 'chicken_rabbit', correct: true, score: 100, params: config });
   }
   stepIndex++;
 }
