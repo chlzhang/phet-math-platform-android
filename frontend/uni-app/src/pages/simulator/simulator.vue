@@ -41,7 +41,7 @@ async function onMessage(e) {
         problem_text: problemText.value || '',
         params: data.params || {},
         score: data.correct ? 100 : (data.score ?? 0),
-        duration: 0
+        duration: data.duration ?? 0
       })
       recordSaved.value = true
     } catch (err) {
