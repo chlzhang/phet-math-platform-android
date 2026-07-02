@@ -23,23 +23,26 @@ function goBack() {
 }
 
 async function onMessage(e) {
-  const data = e.detail?.data || e.detail
-  if (!data || data.event !== 'answer') return
-  const user = uni.getStorageSync('current_user')
-  if (!user) return
-  try {
-    await createRecord({
-      user_id: user.id,
-      type: data.type,
-      type_name: title.value,
-      problem_text: '',
-      params: data.params || {},
-      score: data.correct ? 100 : (data.score ?? 0),
-      duration: 0
-    })
-    recordSaved.value = true
-  } catch (err) {
-    console.error('保存学习记录失败', err)
+  const raw = e.detail?.data
+  const items = Array.isArray(raw) ? raw : [raw]
+  for (const data of items) {
+    if (!data || data.event !== 'answer') continue
+    const user = uni.getStorageSync('current_user')
+    if (!user) continue
+    try {
+      await createRecord({
+        user_id: user.id,
+        type: data.type,
+        type_name: title.value,
+        problem_text: '',
+        params: data.params || {},
+        score: data.correct ? 100 : (data.score ?? 0),
+        duration: 0
+      })
+      recordSaved.value = true
+    } catch (err) {
+      console.error('保存学习记录失败', err)
+    }
   }
 }
 </script>
