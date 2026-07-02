@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.routers import problems, templates, users
+from app.routers import problems, templates, users, learning
 from app.config import get_settings
 from app.database import init_db
 
@@ -42,6 +42,7 @@ app.add_middleware(
 app.include_router(problems.router, prefix="/api/v1")
 app.include_router(templates.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
+app.include_router(learning.router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")
