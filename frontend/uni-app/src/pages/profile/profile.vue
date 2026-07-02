@@ -20,44 +20,60 @@ function getDeviceId() {
 
 async function loadUsers() {
   const deviceId = getDeviceId()
-  const res = await fetchUsers(deviceId)
-  if (res.success) {
-    users.value = res.data.users || []
-    // Auto-create a default child profile on first launch.
-    if (users.value.length === 0) {
-      await createUser({ device_id: deviceId, nickname: '默认宝贝', avatar: '👶' })
-      await loadUsers()
-      return
+  try {
+    const res = await fetchUsers(deviceId)
+    if (res.success) {
+      users.value = res.data.users || []
+      // Auto-create a default child profile on first launch.
+      if (users.value.length === 0) {
+        await createUser({ device_id: deviceId, nickname: '默认宝贝', avatar: '👶' })
+        await loadUsers()
+        return
+      }
+      const cached = uni.getStorageSync(CURRENT_USER_KEY)
+      if (cached) {
+        const found = users.value.find(u => u.id === cached.id)
+        currentUser.value = found || users.value[0] || null
+      } else {
+        currentUser.value = users.value[0] || null
+      }
+      if (currentUser.value) uni.setStorageSync(CURRENT_USER_KEY, currentUser.value)
     }
-    const cached = uni.getStorageSync(CURRENT_USER_KEY)
-    if (cached) {
-      const found = users.value.find(u => u.id === cached.id)
-      currentUser.value = found || users.value[0] || null
-    } else {
-      currentUser.value = users.value[0] || null
-    }
-    if (currentUser.value) uni.setStorageSync(CURRENT_USER_KEY, currentUser.value)
+  } catch (e) {
+    uni.showToast({ title: '加载失败，请检查网络', icon: 'none' })
   }
 }
 
 async function addUser() {
   const name = newName.value.trim() || '默认宝贝'
-  const res = await createUser({ device_id: getDeviceId(), nickname: name, avatar: '👶' })
-  if (res.success) {
-    newName.value = ''
-    await loadUsers()
+  try {
+    const res = await createUser({ device_id: getDeviceId(), nickname: name, avatar: '👶' })
+    if (res.success) {
+      newName.value = ''
+      await loadUsers()
+    }
+  } catch (e) {
+    uni.showToast({ title: '添加失败，请检查网络', icon: 'none' })
   }
 }
 
 function selectUser(u) {
-  currentUser.value = u
-  uni.setStorageSync(CURRENT_USER_KEY, u)
-  uni.showToast({ title: `已切换：${u.nickname}`, icon: 'none' })
+  try {
+    currentUser.value = u
+    uni.setStorageSync(CURRENT_USER_KEY, u)
+    uni.showToast({ title: `已切换：${u.nickname}`, icon: 'none' })
+  } catch (e) {
+    uni.showToast({ title: '切换失败，请重试', icon: 'none' })
+  }
 }
 
 async function removeUser(u) {
-  await deleteUser(u.id)
-  await loadUsers()
+  try {
+    await deleteUser(u.id)
+    await loadUsers()
+  } catch (e) {
+    uni.showToast({ title: '删除失败，请检查网络', icon: 'none' })
+  }
 }
 
 onMounted(loadUsers)

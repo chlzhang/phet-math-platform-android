@@ -9,9 +9,14 @@ async function load() {
   const user = uni.getStorageSync('current_user')
   if (!user) return
   loading.value = true
-  const res = await fetchHistory(user.id)
-  records.value = res.success ? res.data.records : []
-  loading.value = false
+  try {
+    const res = await fetchHistory(user.id)
+    records.value = res.success ? res.data.records : []
+  } catch (e) {
+    uni.showToast({ title: '加载失败，请检查网络', icon: 'none' })
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(load)
