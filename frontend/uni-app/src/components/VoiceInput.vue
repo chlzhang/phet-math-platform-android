@@ -43,7 +43,7 @@ function start() {
     listening.value = true
     tip.value = '正在听...'
     plus.speech.startRecognize(
-      { engine: 'iFly' },
+      {},
       (text) => {
         listening.value = false
         tip.value = ''
