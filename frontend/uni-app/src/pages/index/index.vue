@@ -34,6 +34,10 @@ function goToInput(type = '') {
   const url = type ? `/pages/input/input?type=${encodeURIComponent(type)}` : '/pages/input/input'
   uni.navigateTo({ url })
 }
+
+function goToVoiceInput() { uni.navigateTo({ url: '/pages/input/input?voice=1' }) }
+function goToProfile() { uni.navigateTo({ url: '/pages/profile/profile' }) }
+function goToSettings() { uni.navigateTo({ url: '/pages/settings/settings' }) }
 </script>
 
 <template>
@@ -41,6 +45,26 @@ function goToInput(type = '') {
     <view class="header">
       <text class="title">数学小乐园 🎈</text>
       <text class="subtitle">选一个题型，开始有趣的仿真学习吧！</text>
+    </view>
+
+    <view class="quick-row">
+      <view class="quick-card kid-card" @click="goToVoiceInput">
+        <text class="quick-icon">🎙️</text>
+        <view class="quick-text">
+          <text class="quick-title">按住说话</text>
+          <text class="quick-desc">用语音输入题目</text>
+        </view>
+      </view>
+    </view>
+    <view class="quick-row">
+      <view class="quick-card kid-card" @click="goToProfile">
+        <text class="quick-icon">👶</text>
+        <text class="quick-title">我的孩子</text>
+      </view>
+      <view class="quick-card kid-card" @click="goToSettings">
+        <text class="quick-icon">⚙️</text>
+        <text class="quick-title">设置</text>
+      </view>
     </view>
 
     <view class="quick-entry" @click="goToInput()">
@@ -109,6 +133,16 @@ function goToInput(type = '') {
 
 .quick-entry {
   margin-bottom: 40rpx;
+}
+
+.quick-row {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.quick-row .quick-card {
+  flex: 1;
 }
 
 .quick-card {
