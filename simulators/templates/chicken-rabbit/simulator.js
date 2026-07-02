@@ -32,7 +32,7 @@ function setMode(newMode) {
   document.getElementById('palette').classList.toggle('hidden', mode === 'demo');
   document.getElementById('tip').textContent = mode === 'demo'
     ? '点击“开始演示”，系统会一步步讲解鸡兔同笼的解法。'
-    : '点击 + / − 按钮调整小鸡和小兔数量，让当前头数和腿数与题目一致。';
+    : '点击 + / − 按钮调整小鸡和小兔数量，摆好后点击“提交答案”。';
   reset();
 }
 
@@ -72,6 +72,7 @@ function renderControls() {
         <button class="btn btn-danger btn-lg" onclick="removeAnimal('rabbit')">−</button>
       </div>
     </div>
+    <button class="btn btn-success btn-lg submit-btn" onclick="submitAnswer()">提交答案</button>
   `;
 
   const methodSelector = document.getElementById('methodSelector');
@@ -112,12 +113,15 @@ function applyConfig() {
 
 function addAnimal(type) {
   if (type === 'chicken') chickens++; else rabbits++;
-  renderCage(); checkSuccess();
+  renderCage();
 }
 function removeAnimal(type) {
   if (type === 'chicken' && chickens > 0) chickens--;
   if (type === 'rabbit' && rabbits > 0) rabbits--;
-  renderCage(); checkSuccess();
+  renderCage();
+}
+function submitAnswer() {
+  checkSuccess();
 }
 
 function renderCage() {

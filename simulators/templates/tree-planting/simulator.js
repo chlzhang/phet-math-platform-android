@@ -31,7 +31,7 @@ function setMode(newMode) {
   document.getElementById('treeControls').classList.toggle('hidden', mode === 'demo');
   document.getElementById('tip').textContent = mode === 'demo'
     ? '点击“开始演示”，理解段数和棵数的关系。'
-    : '点击“种一棵”或“移除一棵”调整道路两旁的树，使棵数符合题目要求。';
+    : '点击“种一棵”或“移除一棵”调整树的数量，摆好后点击“提交答案”。';
   reset();
 }
 
@@ -72,6 +72,7 @@ function renderControls() {
   document.getElementById('treeControls').innerHTML = `
     <button class="btn btn-primary btn-lg" onclick="addTree()">🌳 种一棵</button>
     <button class="btn btn-danger btn-lg" onclick="removeTree()">🗑️ 移除一棵</button>
+    <button class="btn btn-success btn-lg submit-btn" onclick="submitAnswer()">提交答案</button>
   `;
 
   document.getElementById('demoControls').innerHTML = `
@@ -128,13 +129,17 @@ function addTree() {
   const validPositions = getValidPositions();
   const next = validPositions.find(p => !plantedPositions.includes(p));
   if (next !== undefined) plantedPositions.push(next);
-  renderRoad(); checkSuccess();
+  renderRoad();
 }
 
 function removeTree() {
   if (mode !== 'interactive' || plantedPositions.length === 0) return;
   plantedPositions.pop();
-  renderRoad(); checkSuccess();
+  renderRoad();
+}
+
+function submitAnswer() {
+  checkSuccess();
 }
 
 function checkSuccess() {

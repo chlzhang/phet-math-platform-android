@@ -34,3 +34,19 @@
 #animalGrid {
   gap: 12px;
 }
+
+#palette {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+}
+
+#palette .submit-btn {
+  min-width: 120px;
+  min-height: 52px;
+  font-size: 1.15rem;
+  padding: 8px 18px;
+  border-radius: 10px;
+}

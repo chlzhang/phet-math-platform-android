@@ -35,3 +35,7 @@
   padding: 8px 18px;
   border-radius: 10px;
 }
+
+#treeControls .submit-btn {
+  min-width: 140px;
+}
