@@ -5,6 +5,7 @@ import { buildSimulatorUrl, createRecord } from '@/utils/api.js'
 
 const title = ref('仿真演示')
 const simulatorUrl = ref('')
+const problemText = ref('')
 const recordSaved = ref(false)
 
 onLoad((options) => {
@@ -13,6 +14,9 @@ onLoad((options) => {
   }
   if (options?.title) {
     title.value = decodeURIComponent(options.title)
+  }
+  if (options?.text) {
+    problemText.value = decodeURIComponent(options.text)
   }
 })
 
@@ -34,7 +38,7 @@ async function onMessage(e) {
         user_id: user.id,
         type: data.type,
         type_name: title.value,
-        problem_text: '',
+        problem_text: problemText.value || '',
         params: data.params || {},
         score: data.correct ? 100 : (data.score ?? 0),
         duration: 0

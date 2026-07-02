@@ -43,7 +43,7 @@ async function handleSubmit({ text, grade }) {
     const res = await parseProblem(text, grade)
     if (res.success && res.data?.simulator_url) {
       const { problem_id, type_name, simulator_url } = res.data
-      const url = `/pages/simulator/simulator?url=${encodeURIComponent(simulator_url)}&title=${encodeURIComponent(type_name || '仿真演示')}`
+      const url = `/pages/simulator/simulator?url=${encodeURIComponent(simulator_url)}&title=${encodeURIComponent(type_name || '仿真演示')}&text=${encodeURIComponent(text)}`
       uni.navigateTo({ url })
     } else {
       uni.showToast({
