@@ -1,0 +1,16 @@
+{
+  "type": "fraction",
+  "name": "分数加减法",
+  "icon": "🍕➗",
+  "description": "用图形直观理解同分母和异分母分数的加减过程。",
+  "grade_range": [3, 5],
+  "keywords": ["分数", "几分之几", "相加", "相减", "和", "差"],
+  "params": {
+    "a": { "label": "第一个分子", "type": "int", "min": 0, "max": 99, "default": 1 },
+    "b": { "label": "第一个分母", "type": "int", "min": 1, "max": 99, "default": 2 },
+    "op": { "label": "运算", "type": "select", "options": ["+", "-"], "default": "+" },
+    "c": { "label": "第二个分子", "type": "int", "min": 0, "max": 99, "default": 1 },
+    "d": { "label": "第二个分母", "type": "int", "min": 1, "max": 99, "default": 3 }
+  },
+  "modes": ["interactive", "demo"]
+}

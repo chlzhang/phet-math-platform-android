@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圆的面积推导</title>
+  <link rel="stylesheet" href="../../shared/simulator-base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="mode-tabs" id="modeTabs"></div>
+    <div class="controls" id="controls"></div>
+    <div class="tip" id="tip">增加扇形份数，观察拼成的图形越来越接近长方形。</div>
+    <div class="main-stage">
+      <div class="card">
+        <div class="viz-area circle-viz">
+          <canvas id="ciCanvas" width="500" height="320" class="shape-canvas"></canvas>
+        </div>
+        <div class="controls hidden" id="demoControls"></div>
+        <div class="success-msg" id="successMsg"></div>
+      </div>
+      <div class="side-panel" id="sidePanel"></div>
+    </div>
+  </div>
+  <script src="../../shared/simulator-core.js"></script>
+  <script src="simulator.js"></script>
+  <script>
+    const params = getUrlParams();
+    initSimulator(params);
+  </script>
+</body>
+</html>

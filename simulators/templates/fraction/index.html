@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分数加减法</title>
+  <link rel="stylesheet" href="../../shared/simulator-base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="mode-tabs" id="modeTabs"></div>
+    <div class="controls" id="controls"></div>
+    <div class="tip" id="tip">观察两个分数的图形表示，理解通分后再加减。</div>
+    <div class="main-stage">
+      <div class="card">
+        <div class="viz-area fraction-viz">
+          <div><div class="fraction-bar" id="bar1"></div><div class="fraction-label" id="label1"></div></div>
+          <div style="font-size:1.5rem;font-weight:bold" id="opLabel"></div>
+          <div><div class="fraction-bar" id="bar2"></div><div class="fraction-label" id="label2"></div></div>
+          <div style="font-size:1.5rem;font-weight:bold">=</div>
+          <div><div class="fraction-bar" id="barResult"></div><div class="fraction-label" id="labelResult">?</div></div>
+        </div>
+        <div class="controls hidden" id="demoControls"></div>
+        <div class="success-msg" id="successMsg"></div>
+      </div>
+      <div class="side-panel" id="sidePanel"></div>
+    </div>
+  </div>
+  <script src="../../shared/simulator-core.js"></script>
+  <script src="simulator.js"></script>
+  <script>
+    const params = getUrlParams();
+    initSimulator(params);
+  </script>
+</body>
+</html>

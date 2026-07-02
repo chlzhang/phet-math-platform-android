@@ -1,0 +1,121 @@
+<script setup>
+import { ref, computed } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { buildSimulatorUrl } from '@/utils/api.js'
+
+const title = ref('仿真演示')
+const simulatorUrl = ref('')
+
+onLoad((options) => {
+  if (options?.url) {
+    simulatorUrl.value = decodeURIComponent(options.url)
+  }
+  if (options?.title) {
+    title.value = decodeURIComponent(options.title)
+  }
+})
+
+const fullUrl = computed(() => buildSimulatorUrl(simulatorUrl.value))
+
+function goBack() {
+  uni.navigateBack({ delta: 1 })
+}
+</script>
+
+<template>
+  <view class="container">
+    <!-- #ifdef MP-WEIXIN -->
+    <cover-view class="header mp-header">
+      <cover-view class="header-inner">
+        <cover-view class="back" @click="goBack">← 返回</cover-view>
+        <cover-view class="title">{{ title }}</cover-view>
+        <cover-view class="placeholder"></cover-view>
+      </cover-view>
+    </cover-view>
+    <!-- #endif -->
+
+    <!-- #ifndef MP-WEIXIN -->
+    <view class="header">
+      <view class="header-inner">
+        <text class="back" @click="goBack">← 返回</text>
+        <text class="title">{{ title }}</text>
+        <text class="placeholder"></text>
+      </view>
+    </view>
+    <!-- #endif -->
+
+    <web-view v-if="fullUrl" class="web-view" :src="fullUrl" />
+    <view v-else class="error">
+      <text class="error-text">仿真地址丢失，请返回重试~</text>
+      <button class="kid-btn" @click="goBack">返回</button>
+    </view>
+  </view>
+</template>
+
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8e1;
+}
+
+.header {
+  flex-shrink: 0;
+  padding-top: var(--status-bar-height);
+  background: #fff8e1;
+  border-bottom: 2rpx solid #ffe0b2;
+}
+
+.mp-header {
+  /* cover-view 需要明确高度，防止被 web-view 覆盖 */
+  height: calc(var(--status-bar-height) + 96rpx);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 96rpx;
+  padding: 0 24rpx;
+}
+
+.back {
+  font-size: 30rpx;
+  color: #ff7043;
+  font-weight: 700;
+  min-width: 120rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #4e342e;
+}
+
+.placeholder {
+  min-width: 120rpx;
+}
+
+.web-view {
+  flex: 1;
+  width: 100%;
+}
+
+.error {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx;
+}
+
+.error-text {
+  font-size: 32rpx;
+  color: #8d6e63;
+  margin-bottom: 36rpx;
+}
+</style>

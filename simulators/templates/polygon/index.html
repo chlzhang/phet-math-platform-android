@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多边形面积推导</title>
+  <link rel="stylesheet" href="../../shared/simulator-base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="mode-tabs" id="modeTabs"></div>
+    <div class="controls" id="controls"></div>
+    <div class="tip" id="tip">点击“变形”，观察图形如何转化成已知图形。</div>
+    <div class="main-stage">
+      <div class="card">
+        <div class="viz-area shape-area">
+          <canvas id="pgCanvas" width="500" height="320" class="shape-canvas"></canvas>
+        </div>
+        <div class="controls hidden" id="demoControls"></div>
+        <div class="success-msg" id="successMsg"></div>
+      </div>
+      <div class="side-panel" id="sidePanel"></div>
+    </div>
+  </div>
+  <script src="../../shared/simulator-core.js"></script>
+  <script src="simulator.js"></script>
+  <script>
+    const params = getUrlParams();
+    initSimulator(params);
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "type": "circle_area",
+  "name": "圆的面积推导",
+  "icon": "⭕📏",
+  "description": "把圆切分成扇形，拼成近似长方形，理解 S=πr² 的来源。",
+  "grade_range": [6],
+  "keywords": ["圆", "半径", "面积", "π", "pi"],
+  "params": {
+    "r": { "label": "半径", "type": "int", "min": 1, "max": 20, "default": 4 },
+    "parts": { "label": "扇形份数", "type": "int", "min": 4, "max": 64, "default": 16 }
+  },
+  "modes": ["interactive", "demo"]
+}

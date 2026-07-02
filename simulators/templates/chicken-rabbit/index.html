@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鸡兔同笼</title>
+  <link rel="stylesheet" href="../../shared/simulator-base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="mode-tabs" id="modeTabs"></div>
+    <div class="controls" id="controls"></div>
+    <div class="tip" id="tip"></div>
+    <div class="controls hidden" id="methodSelector"></div>
+    <div class="main-stage">
+      <div class="card">
+        <div class="viz-area" id="cageArea" ondragover="allowDrop(event)" ondrop="drop(event)">
+          <div style="text-align:center;color:#999;margin-bottom:10px">🏠 笼子</div>
+          <div id="animalGrid" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:200px"></div>
+        </div>
+        <div class="controls" id="palette"></div>
+        <div class="controls hidden" id="demoControls"></div>
+        <div class="success-msg" id="successMsg"></div>
+      </div>
+      <div class="side-panel" id="sidePanel"></div>
+    </div>
+  </div>
+  <script src="../../shared/simulator-core.js"></script>
+  <script src="simulator.js"></script>
+  <script>
+    const params = getUrlParams();
+    initSimulator(params);
+  </script>
+</body>
+</html>

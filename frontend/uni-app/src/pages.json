@@ -1,0 +1,35 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "数学小乐园",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/input/input",
+      "style": {
+        "navigationBarTitleText": "输入题目",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/simulator/simulator",
+      "style": {
+        "navigationBarTitleText": "仿真演示",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "backgroundColor": "#fff8e1",
+    "backgroundTextStyle": "dark"
+  },
+  "uniIdRouter": {},
+  "condition": {}
+}

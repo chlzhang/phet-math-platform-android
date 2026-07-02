@@ -1,0 +1,15 @@
+{
+  "type": "polygon_area",
+  "name": "多边形面积推导",
+  "icon": "📐🔷",
+  "description": "平行四边形、三角形、梯形如何转化成已知图形求面积。",
+  "grade_range": [4, 5],
+  "keywords": ["面积", "平行四边形", "三角形", "梯形", "底", "高"],
+  "params": {
+    "shape": { "label": "图形", "type": "select", "options": ["parallelogram", "triangle", "trapezoid"], "default": "parallelogram" },
+    "a": { "label": "底/上底", "type": "int", "min": 1, "max": 50, "default": 6 },
+    "b": { "label": "下底", "type": "int", "min": 0, "max": 50, "default": 0 },
+    "h": { "label": "高", "type": "int", "min": 1, "max": 50, "default": 4 }
+  },
+  "modes": ["interactive", "demo"]
+}

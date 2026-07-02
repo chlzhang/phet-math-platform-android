@@ -1,0 +1,15 @@
+{
+  "type": "travel",
+  "name": "相遇与追及",
+  "icon": "🏃🏃‍♀️",
+  "description": "通过运动动画理解相遇和追及问题的数量关系。",
+  "grade_range": [4, 6],
+  "keywords": ["相向", "相遇", "同向", "追及", "速度", "路程"],
+  "params": {
+    "type": { "label": "问题类型", "type": "select", "options": ["meet", "chase"], "default": "meet" },
+    "distance": { "label": "路程(米)", "type": "int", "min": 10, "max": 10000, "default": 300 },
+    "v1": { "label": "甲速(米/分)", "type": "int", "min": 1, "max": 1000, "default": 60 },
+    "v2": { "label": "乙速(米/分)", "type": "int", "min": 1, "max": 1000, "default": 40 }
+  },
+  "modes": ["interactive", "demo"]
+}

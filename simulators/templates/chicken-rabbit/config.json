@@ -1,0 +1,18 @@
+{
+  "type": "chicken_rabbit",
+  "name": "鸡兔同笼",
+  "icon": "🐔🐰",
+  "description": "假设全是鸡或全是兔，通过腿数差异推理鸡兔数量。",
+  "grade_range": [3, 5],
+  "keywords": ["鸡", "兔", "头", "腿", "脚", "笼"],
+  "params": {
+    "heads": { "label": "总头数", "type": "int", "min": 2, "max": 50, "default": 8 },
+    "legs": { "label": "总腿数", "type": "int", "min": 4, "max": 200, "default": 22 }
+  },
+  "modes": ["interactive", "demo"],
+  "demo_methods": [
+    { "key": "assume_chicken", "name": "假设全是鸡" },
+    { "key": "assume_rabbit", "name": "假设全是兔" },
+    { "key": "list", "name": "列表尝试法" }
+  ]
+}

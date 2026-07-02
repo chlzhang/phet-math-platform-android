@@ -1,0 +1,14 @@
+{
+  "type": "tree_planting",
+  "name": "植树问题",
+  "icon": "🌳🛣️",
+  "description": "理解段数与棵数的关系：两端都种、一端种、两端不种、环形。",
+  "grade_range": [4, 5],
+  "keywords": ["每隔", "间隔", "米", "种树", "植树", "栽树", "两端"],
+  "params": {
+    "length": { "label": "路长(米)", "type": "int", "min": 1, "max": 1000, "default": 20 },
+    "interval": { "label": "间隔(米)", "type": "int", "min": 1, "max": 100, "default": 5 },
+    "type": { "label": "种植方式", "type": "select", "options": ["both", "one", "none", "circle"], "default": "both" }
+  },
+  "modes": ["interactive", "demo"]
+}
