@@ -7,6 +7,7 @@
   "transformPx": false,
   "app-plus": {
     "usingComponents": true,
+    "compilerVersion": 3,
     "splashscreen": {
       "alwaysShowBeforeRender": true,
       "waiting": true,
@@ -17,12 +18,17 @@
     "distribute": {
       "android": {
         "permissions": [
-          "<uses-permission android:name=\"android.permission.INTERNET\" />"
-        ]
+          "<uses-permission android:name=\"android.permission.INTERNET\" />",
+          "<uses-permission android:name=\"android.permission.RECORD_AUDIO\" />"
+        ],
+        "abiFilters": ["armeabi-v7a", "arm64-v8a"],
+        "minSdkVersion": 21,
+        "targetSdkVersion": 33
       },
       "ios": {},
       "sdkConfigs": {}
-    }
+    },
+    "userPermissions": ["android.permission.RECORD_AUDIO"]
   },
   "quickapp": {},
   "mp-weixin": {
