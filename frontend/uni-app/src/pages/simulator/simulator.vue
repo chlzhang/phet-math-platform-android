@@ -1,10 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { buildSimulatorUrl } from '@/utils/api.js'
+import { buildSimulatorUrl, createRecord } from '@/utils/api.js'
 
 const title = ref('仿真演示')
 const simulatorUrl = ref('')
+const recordSaved = ref(false)
 
 onLoad((options) => {
   if (options?.url) {
@@ -19,6 +20,27 @@ const fullUrl = computed(() => buildSimulatorUrl(simulatorUrl.value))
 
 function goBack() {
   uni.navigateBack({ delta: 1 })
+}
+
+async function onMessage(e) {
+  const data = e.detail?.data || e.detail
+  if (!data || data.event !== 'answer') return
+  const user = uni.getStorageSync('current_user')
+  if (!user) return
+  try {
+    await createRecord({
+      user_id: user.id,
+      type: data.type,
+      type_name: title.value,
+      problem_text: '',
+      params: data.params || {},
+      score: data.correct ? 100 : (data.score ?? 0),
+      duration: 0
+    })
+    recordSaved.value = true
+  } catch (err) {
+    console.error('保存学习记录失败', err)
+  }
 }
 </script>
 
@@ -44,7 +66,7 @@ function goBack() {
     </view>
     <!-- #endif -->
 
-    <web-view v-if="fullUrl" class="web-view" :src="fullUrl" />
+    <web-view v-if="fullUrl" class="web-view" :src="fullUrl" @message="onMessage" />
     <view v-else class="error">
       <text class="error-text">仿真地址丢失，请返回重试~</text>
       <button class="kid-btn" @click="goBack">返回</button>
