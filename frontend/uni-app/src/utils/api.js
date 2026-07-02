@@ -1,4 +1,4 @@
-const DEFAULT_SERVER = 'http://192.168.1.100:8090'
+const DEFAULT_SERVER = 'http://192.168.1.100:8091'
 const SERVER_KEY = 'server_url'
 
 export function getServerUrl() {
