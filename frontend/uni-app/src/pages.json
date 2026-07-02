@@ -40,6 +40,30 @@
         "navigationBarBackgroundColor": "#fff8e1",
         "navigationBarTextStyle": "black"
       }
+    },
+    {
+      "path": "pages/history/history",
+      "style": {
+        "navigationBarTitleText": "练习历史",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/mistakes/mistakes",
+      "style": {
+        "navigationBarTitleText": "错题本",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/progress/progress",
+      "style": {
+        "navigationBarTitleText": "学习进度",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
     }
   ],
   "globalStyle": {
