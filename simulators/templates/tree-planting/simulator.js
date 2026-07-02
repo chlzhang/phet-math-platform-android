@@ -148,7 +148,7 @@ function checkSuccess() {
 }
 
 function prepareInteractiveSteps() {
-  document.getElementById('steps').innerHTML = '<p style="color:#999">点击道路种树，注意段数和棵数的关系。</p>';
+  document.getElementById('steps').innerHTML = '<p style="color:#999">点击“种一棵”或“移除一棵”调整树的数量，注意段数和棵数的关系。</p>';
 }
 
 function prepareDemoSteps() {
