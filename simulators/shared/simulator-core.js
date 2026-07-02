@@ -2,6 +2,8 @@
  * 小学数学仿真器公共核心库
  */
 
+const SIMULATOR_START_TIME = Date.now();
+
 function createEl(tag, className, text) {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -103,7 +105,8 @@ function animate(duration, onFrame, onComplete) {
 }
 
 function sendAnswerEvent(detail) {
-  const data = { event: 'answer', ...detail };
+  const elapsedSeconds = Math.max(1, Math.round((Date.now() - SIMULATOR_START_TIME) / 1000));
+  const data = { event: 'answer', ...detail, duration: elapsedSeconds };
   if (window.uni && window.uni.postMessage) {
     window.uni.postMessage({ data });
   } else if (window.parent && window.parent.postMessage) {
