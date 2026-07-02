@@ -23,6 +23,12 @@ async function loadUsers() {
   const res = await fetchUsers(deviceId)
   if (res.success) {
     users.value = res.data.users || []
+    // Auto-create a default child profile on first launch.
+    if (users.value.length === 0) {
+      await createUser({ device_id: deviceId, nickname: '默认宝贝', avatar: '👶' })
+      await loadUsers()
+      return
+    }
     const cached = uni.getStorageSync(CURRENT_USER_KEY)
     if (cached) {
       const found = users.value.find(u => u.id === cached.id)
