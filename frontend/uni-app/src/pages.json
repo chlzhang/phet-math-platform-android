@@ -32,6 +32,14 @@
         "navigationBarBackgroundColor": "#fff8e1",
         "navigationBarTextStyle": "black"
       }
+    },
+    {
+      "path": "pages/settings/settings",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
     }
   ],
   "globalStyle": {
