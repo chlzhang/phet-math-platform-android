@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.database import get_db
-from app.models import User
+from app.models import User, LearningRecord
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -56,6 +56,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="用户不存在")
+    db.query(LearningRecord).filter(LearningRecord.user_id == user_id).delete()
     db.delete(user)
     db.commit()
     return {"success": True, "data": {"id": user_id}}
