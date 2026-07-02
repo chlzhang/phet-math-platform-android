@@ -24,6 +24,14 @@
         "navigationBarTextStyle": "black",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "我的孩子",
+        "navigationBarBackgroundColor": "#fff8e1",
+        "navigationBarTextStyle": "black"
+      }
     }
   ],
   "globalStyle": {
