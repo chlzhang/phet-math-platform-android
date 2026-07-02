@@ -144,6 +144,7 @@ function checkSuccess() {
     sendAnswerEvent({ type: 'tree_planting', correct: true, score: 100, params: config });
   } else {
     document.getElementById('successMsg').style.display = 'none';
+    sendAnswerEvent({ type: 'tree_planting', correct: false, score: 0, params: config });
   }
 }
 

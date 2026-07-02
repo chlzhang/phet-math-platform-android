@@ -143,6 +143,7 @@ function checkSuccess() {
     sendAnswerEvent({ type: 'chicken_rabbit', correct: true, score: 100, params: config });
   } else {
     document.getElementById('successMsg').style.display = 'none';
+    sendAnswerEvent({ type: 'chicken_rabbit', correct: false, score: 0, params: config });
   }
 }
 
