@@ -1,6 +1,8 @@
 let config = {};
 let mode = 'interactive';
 let stepIndex = 0, demoSteps = [];
+let animating = false;
+let animationTimer = null;
 
 const typeNames = { meet: '相遇问题', chase: '追及问题' };
 
@@ -33,6 +35,9 @@ function setMode(newMode) {
 
 function reset() {
   stepIndex = 0;
+  animating = false;
+  clearTimeout(animationTimer);
+  animationTimer = null;
   const track = document.getElementById('track');
   const w = track.clientWidth - 40;
   document.getElementById('a').style.transition = 'none';
@@ -108,10 +113,13 @@ function updateStats(time, distA, distB) {
 }
 
 function playAnimation(onComplete) {
+  if (animating) return;
   const track = document.getElementById('track');
   const w = track.clientWidth - 40;
   const time = computeTime();
   if (!isFinite(time)) { alert('速度设置不合理，无法追上'); return; }
+  animating = true;
+  clearTimeout(animationTimer);
   const distA = config.v1 * time;
   const distB = config.v2 * time;
   const meetLeft = 10 + (distA / config.distance) * w;
@@ -121,7 +129,9 @@ function playAnimation(onComplete) {
   document.getElementById('b').style.left = config.type === 'meet' ? meetLeft + 'px' : (10 + (distB / config.distance) * w) + 'px';
   document.getElementById('meetPoint').style.left = meetLeft + 'px';
   document.getElementById('meetPoint').style.opacity = '1';
-  setTimeout(() => {
+  animationTimer = setTimeout(() => {
+    animating = false;
+    animationTimer = null;
     updateStats(time, distA, distB);
     if (onComplete) onComplete();
   }, time * 1000);
