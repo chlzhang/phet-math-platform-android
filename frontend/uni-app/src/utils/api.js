@@ -1,36 +1,34 @@
-/**
- * API 封装
- * H5 环境下自动使用当前页面 origin，实现本地开发、Docker 本地部署、线上域名部署无需修改代码。
- * 小程序 / App 环境请把下方 fallback 域名改成你的生产域名。
- */
+const DEFAULT_SERVER = 'http://192.168.1.100:8090'
+const SERVER_KEY = 'server_url'
+
+export function getServerUrl() {
+  try {
+    return uni.getStorageSync(SERVER_KEY) || DEFAULT_SERVER
+  } catch (e) {
+    return DEFAULT_SERVER
+  }
+}
+
+export function setServerUrl(url) {
+  uni.setStorageSync(SERVER_KEY, url)
+}
 
 function getApiBase() {
-  // H5（浏览器）：用当前页面 origin，前后端同域部署，避免跨域
+  // #ifdef H5
   if (typeof window !== 'undefined' && window.location) {
     return `${window.location.origin}/api/v1`
   }
-  // 小程序 / App：填写实际生产域名
-  return 'https://your-domain.com/api/v1'
+  // #endif
+  return `${getServerUrl()}/api/v1`
 }
 
-const API_BASE = getApiBase()
-
-/**
- * 通用请求封装
- * @param {string} method HTTP 方法
- * @param {string} url 相对地址（如 /templates）
- * @param {object} data 请求数据
- * @returns {Promise<object>}
- */
 export function request(method, url, data = {}) {
   return new Promise((resolve, reject) => {
     uni.request({
-      url: `${API_BASE}${url}`,
+      url: `${getApiBase()}${url}`,
       method,
       data,
-      header: {
-        'Content-Type': 'application/json'
-      },
+      header: { 'Content-Type': 'application/json' },
       timeout: 20000,
       success: (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
@@ -39,44 +37,36 @@ export function request(method, url, data = {}) {
           reject(new Error(`请求失败：${res.statusCode}`))
         }
       },
-      fail: (err) => {
-        reject(err)
-      }
+      fail: reject
     })
   })
 }
 
-/**
- * 获取模板列表
- */
-export function fetchTemplates() {
-  return request('GET', '/templates')
+export function fetchTemplates() { return request('GET', '/templates') }
+export function fetchTemplateDetail(type) { return request('GET', `/templates/${type}`) }
+export function parseProblem(text, grade) { return request('POST', '/problems/parse', { text, grade }) }
+
+export function createUser(payload) { return request('POST', '/users', payload) }
+export function fetchUsers(deviceId) { return request('GET', `/users?device_id=${encodeURIComponent(deviceId)}`) }
+export function updateUser(id, payload) { return request('PUT', `/users/${id}`, payload) }
+export function deleteUser(id) { return request('DELETE', `/users/${id}`) }
+
+export function createRecord(payload) { return request('POST', '/learning/record', payload) }
+export function fetchHistory(userId, page = 1, size = 20) {
+  return request('GET', `/learning/history?user_id=${userId}&page=${page}&size=${size}`)
+}
+export function fetchProgress(userId) { return request('GET', `/learning/progress?user_id=${userId}`) }
+export function fetchMistakes(userId, page = 1, size = 20) {
+  return request('GET', `/learning/mistakes?user_id=${userId}&page=${page}&size=${size}`)
 }
 
-/**
- * 解析题目
- * @param {string} text 题目文本
- * @param {number} grade 年级
- */
-export function parseProblem(text, grade) {
-  return request('POST', '/problems/parse', { text, grade })
-}
-
-/**
- * 获取模板详情
- * @param {string} type 题型类型
- */
-export function fetchTemplateDetail(type) {
-  return request('GET', `/templates/${type}`)
-}
-
-/**
- * 根据后端返回的相对 URL 拼装完整仿真器地址
- * @param {string} simulatorUrl 后端返回的 simulator_url，如 /simulators/chicken-rabbit/index.html?heads=8
- */
 export function buildSimulatorUrl(simulatorUrl) {
   if (!simulatorUrl) return ''
   if (simulatorUrl.startsWith('http')) return simulatorUrl
-  const root = API_BASE.replace(/\/api\/v1$/, '')
-  return `${root}${simulatorUrl}`
+  // #ifdef H5
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.origin}${simulatorUrl}`
+  }
+  // #endif
+  return `${getServerUrl()}${simulatorUrl}`
 }
