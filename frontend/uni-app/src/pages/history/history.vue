@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { fetchHistory } from '@/utils/api.js'
 
 const records = ref([])
@@ -20,6 +21,7 @@ async function load() {
 }
 
 onMounted(load)
+onShow(load)
 </script>
 
 <template>

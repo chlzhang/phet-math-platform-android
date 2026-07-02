@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { fetchMistakes } from '@/utils/api.js'
 
 const records = ref([])
@@ -22,6 +23,7 @@ async function load() {
 }
 
 onMounted(load)
+onShow(load)
 </script>
 
 <template>
