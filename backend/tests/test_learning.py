@@ -34,3 +34,23 @@ def test_record_history_progress_mistakes():
 
         ms = client.get(f"/api/v1/learning/mistakes?user_id={uid}").json()["data"]
         assert ms["total"] == 1
+
+
+def test_record_duration_persisted():
+    with TestClient(app) as client:
+        u = client.post("/api/v1/users", json={"device_id": "d-duration", "nickname": "时长测试"}).json()["data"]
+        uid = u["id"]
+
+        r = client.post("/api/v1/learning/record", json={
+            "user_id": uid,
+            "type": "chicken_rabbit",
+            "type_name": "鸡兔同笼",
+            "problem_text": "8头22脚",
+            "score": 100,
+            "duration": 42
+        })
+        assert r.status_code == 200
+
+        hist = client.get(f"/api/v1/learning/history?user_id={uid}").json()["data"]
+        assert hist["total"] == 1
+        assert hist["records"][0]["duration"] == 42
