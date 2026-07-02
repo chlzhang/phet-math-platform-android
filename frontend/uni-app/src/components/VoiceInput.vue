@@ -1,9 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+
+const props = defineProps({
+  autoStart: { type: Boolean, default: false }
+})
 
 const emit = defineEmits(['result', 'error'])
 const listening = ref(false)
 const tip = ref('')
+
+onMounted(() => {
+  if (props.autoStart) {
+    start()
+  }
+})
 
 function requestPermission() {
   return new Promise((resolve, reject) => {

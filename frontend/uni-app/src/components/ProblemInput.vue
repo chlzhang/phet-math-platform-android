@@ -1,29 +1,36 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 /**
  * 题目输入组件（可复用）
- * 支持 v-model 形式的 text 与 grade
- * emits: submit({ text, grade })
+ * 支持 v-model:text 双向绑定
+ * emits: submit({ text, grade }), update:text
  */
 const props = defineProps({
   typeName: { type: String, default: '' },
-  defaultText: { type: String, default: '' },
+  text: { type: String, default: '' },
   defaultGrade: { type: Number, default: 3 },
   loading: { type: Boolean, default: false }
 })
 
-const text = ref(props.defaultText)
+const text = ref(props.text || '')
 const gradeIndex = ref(Math.max(0, props.defaultGrade - 1))
 
 const grades = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级']
 
 const selectedGrade = computed(() => gradeIndex.value + 1)
 
-const emit = defineEmits(['submit'])
+watch(() => props.text, (v) => { text.value = v || '' })
+
+const emit = defineEmits(['submit', 'update:text'])
 
 function onGradeChange(e) {
   gradeIndex.value = Number(e.detail.value)
+}
+
+function onInput(e) {
+  text.value = e.detail.value
+  emit('update:text', text.value)
 }
 
 function submit() {
@@ -32,6 +39,7 @@ function submit() {
     uni.showToast({ title: '请先输入题目哦~', icon: 'none' })
     return
   }
+  emit('update:text', value)
   emit('submit', { text: value, grade: selectedGrade.value })
 }
 </script>
@@ -45,12 +53,13 @@ function submit() {
     <view class="field">
       <text class="label">题目内容</text>
       <textarea
-        v-model="text"
+        :value="text"
         class="kid-input textarea"
         placeholder="把题目粘贴或输入到这里，例如：笼子里有若干只鸡和兔..."
         placeholder-class="placeholder"
         :maxlength="800"
         auto-height
+        @input="onInput"
       />
     </view>
 

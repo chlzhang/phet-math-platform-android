@@ -3,17 +3,28 @@ import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { parseProblem, fetchTemplateDetail } from '@/utils/api.js'
 import ProblemInput from '@/components/ProblemInput.vue'
+import VoiceInput from '@/components/VoiceInput.vue'
 
 const currentType = ref('')
 const typeName = ref('')
 const loading = ref(false)
+const text = ref('')
+const autoVoice = ref(false)
 
 onLoad((options) => {
   if (options?.type) {
     currentType.value = decodeURIComponent(options.type)
     loadTypeName(currentType.value)
   }
+  if (options?.voice === '1') {
+    autoVoice.value = true
+  }
 })
+
+function onVoiceResult(t) {
+  text.value = t
+  uni.showToast({ title: '已填入语音内容', icon: 'none' })
+}
 
 async function loadTypeName(type) {
   try {
@@ -61,7 +72,10 @@ async function handleSubmit({ text, grade }) {
       <text class="subtitle">把数学题目告诉小助手，马上生成动画仿真</text>
     </view>
 
+    <VoiceInput :auto-start="autoVoice" @result="onVoiceResult" />
+
     <ProblemInput
+      v-model:text="text"
       :type-name="typeName || '自由输入'"
       :loading="loading"
       @submit="handleSubmit"
