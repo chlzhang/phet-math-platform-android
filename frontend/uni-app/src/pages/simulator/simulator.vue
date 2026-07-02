@@ -65,6 +65,8 @@ function goBack() {
   padding-top: var(--status-bar-height);
   background: #fff8e1;
   border-bottom: 2rpx solid #ffe0b2;
+  position: relative;
+  z-index: 1000;
 }
 
 .mp-header {
@@ -81,10 +83,15 @@ function goBack() {
 }
 
 .back {
-  font-size: 30rpx;
-  color: #ff7043;
+  font-size: 28rpx;
+  color: #fff;
   font-weight: 700;
-  min-width: 120rpx;
+  background: #ff7043;
+  padding: 12rpx 24rpx;
+  border-radius: 32rpx;
+  min-width: 100rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 12rpx rgba(255, 112, 67, 0.3);
 }
 
 .title {
