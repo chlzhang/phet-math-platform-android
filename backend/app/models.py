@@ -11,8 +11,10 @@ class User(Base):
     __tablename__ = "users"
     
     id = Column(Integer, primary_key=True, index=True)
+    device_id = Column(String(64), index=True, nullable=True)
     openid = Column(String(64), unique=True, index=True, nullable=True)
     nickname = Column(String(64), nullable=True)
+    avatar = Column(String(128), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -48,9 +50,12 @@ class LearningRecord(Base):
     __tablename__ = "learning_records"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, nullable=True)
+    user_id = Column(Integer, index=True, nullable=True)
     problem_id = Column(Integer, nullable=True)
-    type = Column(String(32), nullable=False)
+    type = Column(String(32), nullable=False, index=True)
+    type_name = Column(String(64), nullable=True)
+    problem_text = Column(Text, nullable=True)
+    params = Column(JSON, default=dict)
     score = Column(Integer, nullable=True)
     duration = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
