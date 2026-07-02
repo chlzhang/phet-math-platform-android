@@ -101,3 +101,12 @@ function animate(duration, onFrame, onComplete) {
   }
   requestAnimationFrame(step);
 }
+
+function sendAnswerEvent(detail) {
+  const data = { event: 'answer', ...detail };
+  if (window.uni && window.uni.postMessage) {
+    window.uni.postMessage({ data });
+  } else if (window.parent && window.parent.postMessage) {
+    window.parent.postMessage(data, '*');
+  }
+}
