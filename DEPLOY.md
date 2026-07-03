@@ -26,7 +26,72 @@ sudo usermod -aG docker $USER
 
 Windows 用户可安装 Docker Desktop 并启用 WSL2 后端。
 
-## 三、上传项目代码
+## 三、绿联 NAS 部署
+
+绿联 NAS 的 UGOS 系统自带 Docker 支持，适合作为家庭内网后端服务器。
+
+### 1. 开启 SSH
+
+1. 登录绿联 NAS 的 Web 管理界面。
+2. 进入「控制面板」→「终端」→ 开启 SSH。
+3. 记住 SSH 端口（默认 22）和管理员账号密码。
+
+### 2. 上传项目代码
+
+**方式一：通过 SMB 复制（推荐）**
+
+1. 在电脑上打开文件资源管理器，输入 `\\nas-ip` 访问绿联 NAS。
+2. 把 `phet-math-platform-android` 文件夹复制到 NAS 的共享文件夹，例如 `/docker/phet-math-platform-android/`。
+
+**方式二：通过 rsync**
+
+```bash
+rsync -avz --exclude='.git' \
+  --exclude='node_modules' \
+  --exclude='.venv' \
+  --exclude='.env' \
+  ./phet-math-platform-android/ user@nas-ip:/volume1/docker/phet-math-platform-android/
+```
+
+> 绿联 NAS 的共享文件夹通常在 `/volume1/` 下，具体路径根据你的存储池而定。不要上传 `.env` 文件和本地数据库文件。
+
+### 3. 启动服务
+
+SSH 登录 NAS 后执行：
+
+```bash
+ssh user@nas-ip
+cd /volume1/docker/phet-math-platform-android
+cp .env.example .env
+docker compose up -d --build
+```
+
+查看运行状态：
+
+```bash
+docker compose ps
+docker compose logs -f backend
+```
+
+### 4. 查看 NAS 局域网 IP
+
+```bash
+hostname -I
+```
+
+例如服务器 IP 为 `192.168.1.50`，后端端口为 `8091`。
+
+### 5. 绿联 NAS 注意事项
+
+| 项目 | 说明 |
+|------|------|
+| 架构 | 绿联常见型号（DX4600、DXP4800 等）为 x86_64（Intel Celeron），`python:3.11-slim` 镜像可直接运行；ARM 型号也支持多架构镜像。 |
+| 存储位置 | 建议放在 `/volume1/docker/...` 等共享文件夹下，不要用系统盘，方便备份。 |
+| 权限 | 确保挂载目录有写入权限，否则 SQLite 数据库可能创建失败。 |
+| 自动重启 | `docker-compose.yml` 已配置 `restart: unless-stopped`，NAS 重启后服务自动拉起。 |
+| 防火墙 | 如果开启防火墙，记得放行 8091 端口。 |
+
+## 四、上传项目代码（通用 Linux/Windows 服务器）
 
 在本地项目根目录执行：
 
@@ -43,7 +108,7 @@ rsync -avz --exclude='.git' \
 
 > 不要上传 `.env` 文件（包含密钥）和本地数据库文件。
 
-## 四、配置环境变量
+## 五、配置环境变量
 
 登录服务器：
 
@@ -71,7 +136,7 @@ LLM_PROVIDER=mock
 
 保存退出。
 
-## 五、启动服务
+## 六、启动服务
 
 ```bash
 cd /opt/phet-math-platform-android
@@ -85,7 +150,7 @@ docker compose ps
 docker compose logs -f backend
 ```
 
-## 六、查看服务器局域网 IP
+## 七、查看服务器局域网 IP
 
 ```bash
 ip addr show
@@ -95,7 +160,7 @@ hostname -I
 
 例如服务器 IP 为 `192.168.1.100`，后端端口为 `8091`。
 
-## 七、平板端配置
+## 八、平板端配置
 
 1. 在 Android 平板上安装 HBuilderX 生成的 APK
 2. 打开应用，进入「设置」页面
@@ -104,7 +169,7 @@ hostname -I
 
 > 由于使用 HTTP 明文传输，已在 `manifest.json` 中配置 `usesCleartextTraffic="true"`。
 
-## 八、更新维护
+## 九、更新维护
 
 ### 更新前端代码
 
